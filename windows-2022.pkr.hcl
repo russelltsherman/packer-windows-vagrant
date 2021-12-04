@@ -101,8 +101,9 @@ source "virtualbox-iso" "windows-2022-amd64" {
     "winrm.ps1",
     "provision-openssh.ps1",
   ]
-  guest_additions_interface = "sata"
-  guest_additions_mode      = "attach"
+  # these lines result in an unbootable vm https://github.com/hashicorp/packer/issues/11357
+  # guest_additions_interface = "sata"
+  # guest_additions_mode      = "attach"
   guest_os_type             = "Windows2019_64"
   hard_drive_interface      = "sata"
   headless                  = true

@@ -34,6 +34,19 @@ if (!(New-Object System.Security.Principal.WindowsPrincipal(
 
 Add-Type -A System.IO.Compression.FileSystem
 
+# mount Guest Additions iso
+# work around for issue https://github.com/hashicorp/packer/issues/11357
+# ISO image - replace with path to ISO to be mounted
+$isoImg = "C:\Users\vagrant\VBoxGuestAdditions.iso"
+# Drive letter - use desired drive letter
+$driveLetter = "E:"
+# Mount the ISO, without having a drive letter auto-assigned
+$diskImg = Mount-DiskImage -ImagePath $isoImg  -NoDriveLetter
+# Get mounted ISO volume
+$volInfo = $diskImg | Get-Volume
+# Mount volume with specified drive letter (requires Administrator access)
+mountvol $driveLetter $volInfo.UniqueId
+
 # install Guest Additions.
 $systemVendor = (Get-WmiObject Win32_ComputerSystemProduct Vendor).Vendor
 if ($systemVendor -eq 'QEMU') {
